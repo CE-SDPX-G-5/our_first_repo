@@ -1,16 +1,17 @@
 import unittest
-import app 
+
+from app import app
 
 class AppTestCase(unittest.TestCase):
-    def test_is_prime_number17(self):
-        res = app.is_prime(17)
-        data = res.get_json()
-        self.assertEqual(data['msg'], 'True')
+    def test_hello_with_string(self):
+        # test hello
+        res = app.hello("Rathachai")
+        self.assertEqual(res, "Hello, Rathachai")
 
-    def test_is_prime_number36(self):
-        res = app.is_prime(36)
-        data = res.get_json()
-        self.assertEqual(data['msg'], 'False')
+    def test_hello_with_number(self):
+        # test hello
+        res = app.hello(1)
+        self.assertEqual(res, "Hello, 1")
 
 if __name__ == "__main__":
     unittest.main()
