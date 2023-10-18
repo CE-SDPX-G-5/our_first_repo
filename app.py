@@ -1,5 +1,4 @@
-
-from flask import Flask, jsonify
+from flask import Flask,jsonify
 
 app = Flask(__name__)
 
@@ -7,27 +6,20 @@ app.app_context().push()
 
 @app.route('/')
 def index():
-    return "Index!"
+    return "Hello Wrold"
 
-@app.route('/is_prime/<num1>', methods=['GET'])
-def is_prime(num1):
+@app.route('/next2/<x>',methods=['GET'])
+def next2(x):
     try:
-        num1 = int(num1)
-        if num1 > 1:
-            for i in range(2, int(num1/2)+1):
-                if (num1 % i) == 0:
-                    results = { 'msg' : 'False' }
-                    break
-            else:
-                results = { 'msg' : 'True' }
+        x = int(x)
+        res = {'mrg': x+2}
+    except ValueError:
+        try:
+            x = float(x)
+            res = {'mrg': x+2}
+        except:
+            res = {'mrg': 'Error'}
+    return jsonify(res)
 
-        else:
-            results = { 'msg' : 'False' }
-
-    except:
-        results = { 'error_msg' : 'inputs must be numbers' }
-    return jsonify(results)
-
-
-if __name__ == '__main__':
+if __name__=="__main__":
     app.run()
