@@ -5,7 +5,7 @@ Library           RequestsLibrary
 *** Keywords ***
 Get Prime JSON
     [Arguments]    ${num1}
-    ${resp}=     GET    http://127.0.0.1:5000/is_prime/${num1}
+    ${resp}=     GET    http://127.0.0.1:5000/next2/${num1}
 
     # Verify the status code is 200 (OK)
     Should Be Equal    ${resp.status_code}    ${200}
@@ -16,32 +16,32 @@ Get Prime JSON
 
 *** Test Cases ***
 Test Prime Numbers 17 (ฺBefore Using Keywords)
-    ${resp}=     GET    http://127.0.0.1:5000/is_prime/17
+    ${resp}=     GET    http://127.0.0.1:5000/next2/5
     Should Be Equal    ${resp.status_code}    ${200}
     ${json_resp}=    Set Variable  ${resp.json()}
-    Should Be Equal    ${json_resp['msg']}    True
+    Should Be Equal    ${json_resp['msg']}    ${7}
 
 Test Prime Numbers 36 (ฺBefore Using Keywords)
-    ${resp}=     GET    http://127.0.0.1:5000/is_prime/36
+    ${resp}=     GET    http://127.0.0.1:5000/next2/5
     Should Be Equal    ${resp.status_code}    ${200}
     ${json_resp}=    Set Variable  ${resp.json()}
-    Should Be Equal    ${json_resp['msg']}    False
+    Should Be Equal    ${json_resp['msg']}    -3
 
 Test Prime Numbers 13219 (ฺBefore Using Keywords)
-    ${resp}=     GET    http://127.0.0.1:5000/is_prime/13219
+    ${resp}=     GET    http://127.0.0.1:5000/next2/3.5
     Should Be Equal    ${resp.status_code}    ${200}
     ${json_resp}=    Set Variable  ${resp.json()}
-    Should Be Equal    ${json_resp['msg']}    True
+    Should Be Equal    ${json_resp['msg']}    5.5
 
 
 Test Prime Numbers 17
-    ${json_resp}=    Get Prime JSON    ${17}
-    Should Be Equal    ${json_resp['msg']}    True
+    ${json_resp}=    Get Prime JSON    ${5}
+    Should Be Equal    ${json_resp['msg']}    7
 
 Test Prime Numbers 36
-    ${json_resp}=    Get Prime JSON    ${36}
-    Should Be Equal    ${json_resp['msg']}    False
+    ${json_resp}=    Get Prime JSON    ${-5}
+    Should Be Equal    ${json_resp['msg']}    -3
 
 Test Prime Numbers 13219
-    ${json_resp}=    Get Prime JSON    ${13219}
-    Should Be Equal    ${json_resp['msg']}    True
+    ${json_resp}=    Get Prime JSON    ${3.5}
+    Should Be Equal    ${json_resp['msg']}    5.5

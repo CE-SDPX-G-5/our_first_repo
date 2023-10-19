@@ -1,26 +1,27 @@
 import unittest
 import app
 
-class AppTestCase(unittest.TestCase):
-    def test_7(self):
-        res = app.next2('5')
-        data = res.get_json()
-        self.assertEqual(data['mrg'], 7)
+class ApptestCase(unittest.TestCase):
+    def testint5(self):
+        resp = app.isneg(0)
+        data = resp.get_json()
+        self.assertEqual(data['msg'],"False")
 
-    def test_8(self):
-        res = app.next2('6')
-        data = res.get_json()
-        self.assertEqual(data['mrg'], 8)
+    def testintnext5(self):
+        resp = app.isneg(3)
+        data = resp.get_json()
+        self.assertEqual(data['msg'],"False")
 
-    def test_8(self):
-        res = app.next2('3.5')
-        data = res.get_json()
-        self.assertEqual(data['mrg'], 5.5)
+    def testfloat35(self):
+        resp = app.isneg('-5')
+        data = resp.get_json()
+        self.assertEqual(data['msg'],"True")
 
-    def test_8(self):
-        res = app.next2('a')
-        data = res.get_json()
-        self.assertEqual(data['mrg'], 'Error')
+    def teststr(self):
+        resp = app.isneg('a')
+        data = resp.get_json()
+        self.assertEqual(data['msg'],'error')
+
 
 if __name__ == "__main__":
     unittest.main()

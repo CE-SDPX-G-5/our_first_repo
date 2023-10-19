@@ -1,25 +1,39 @@
 from flask import Flask,jsonify
 
-app = Flask(__name__)
+app = Flask (__name__)
 
 app.app_context().push()
 
 @app.route('/')
 def index():
-    return "Hello Wrold"
+    return 'Welcome'
 
-@app.route('/next2/<x>',methods=['GET'])
-def next2(x):
+@app.route('/isneg/<i>',methods=['GET'])
+def isneg(i):
+
     try:
-        x = int(x)
-        res = {'mrg': x+2}
+        try:
+            i = int(i)
+            if i < 0 :
+                resp = { 'msg' : ("True") }
+            elif i >= 0 :
+                resp = { 'msg' : ("False") }
+        except:
+            i = float(i)    
+            if i >= 0 :
+                resp = { 'msg' : ("True 2") }
+            elif i >= 0 :
+                resp = { 'msg' : ("False 2") }      
+                
     except ValueError:
         try:
-            x = float(x)
-            res = {'mrg': x+2}
+            i = float(i)
+            resp = { 'msg' : (i+2) }
         except:
-            res = {'mrg': 'Error'}
-    return jsonify(res)
+            i = str(i)
+            resp = { 'msg' : 'error' }
+     
+    return jsonify(resp)   
 
-if __name__=="__main__":
+if __name__ == "__main__":
     app.run()
