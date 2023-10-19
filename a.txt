@@ -1,0 +1,100 @@
+
+from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+app.app_context().push()
+
+@app.route('/')
+def index():
+    return "Index!"
+
+@app.route('/is_prime/<num1>', methods=['GET'])
+def is_prime(num1):
+    try:
+        num1 = int(num1)
+        if num1 > 1:
+            for i in range(2, int(num1/2)+1):
+                if (num1 % i) == 0:
+                    results = { 'msg' : 'False' }
+                    break
+            else:
+                results = { 'msg' : 'True' }
+
+        else:
+            results = { 'msg' : 'False' }
+
+    except:
+        results = { 'error_msg' : 'inputs must be numbers' }
+    return jsonify(results)
+
+
+if __name__ == '__main__':
+    app.run()
+
+
+*** Settings ***
+Library           RequestsLibrary
+
+
+*** Keywords ***
+Get Prime JSON
+    [Arguments]    ${num1}
+    ${resp}=     GET    http://127.0.0.1:5000/is_prime/${num1}
+
+    # Verify the status code is 200 (OK)
+    Should Be Equal    ${resp.status_code}    ${200}
+
+    # Get the response content as a JSON object
+    [return]    ${resp.json()}
+
+
+*** Test Cases ***
+Test Prime Numbers 17 (ฺBefore Using Keywords)
+    ${resp}=     GET    http://127.0.0.1:5000/is_prime/17
+    Should Be Equal    ${resp.status_code}    ${200}
+    ${json_resp}=    Set Variable  ${resp.json()}
+    Should Be Equal    ${json_resp['msg']}    True
+
+Test Prime Numbers 36 (ฺBefore Using Keywords)
+    ${resp}=     GET    http://127.0.0.1:5000/is_prime/36
+    Should Be Equal    ${resp.status_code}    ${200}
+    ${json_resp}=    Set Variable  ${resp.json()}
+    Should Be Equal    ${json_resp['msg']}    False
+
+Test Prime Numbers 13219 (ฺBefore Using Keywords)
+    ${resp}=     GET    http://127.0.0.1:5000/is_prime/13219
+    Should Be Equal    ${resp.status_code}    ${200}
+    ${json_resp}=    Set Variable  ${resp.json()}
+    Should Be Equal    ${json_resp['msg']}    True
+
+
+Test Prime Numbers 17
+    ${json_resp}=    Get Prime JSON    ${17}
+    Should Be Equal    ${json_resp['msg']}    True
+
+Test Prime Numbers 36
+    ${json_resp}=    Get Prime JSON    ${36}
+    Should Be Equal    ${json_resp['msg']}    False
+
+Test Prime Numbers 13219
+    ${json_resp}=    Get Prime JSON    ${13219}
+    Should Be Equal    ${json_resp['msg']}    True
+
+
+import unittest
+import app 
+
+class AppTestCase(unittest.TestCase):
+    def test_is_prime_number17(self):
+        res = app.is_prime(17)
+        data = res.get_json()
+        self.assertEqual(data['msg'], 'True')
+
+    def test_is_prime_number36(self):
+        res = app.is_prime(36)
+        data = res.get_json()
+        self.assertEqual(data['msg'], 'False')
+
+if __name__ == "__main__":
+    unittest.main()
