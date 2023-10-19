@@ -22,5 +22,6 @@ class ApptestCase(unittest.TestCase):
         data = resp.get_json()
         self.assertEqual(data['msg'],'error')
 
+
 if __name__ == "__main__":
     unittest.main()
